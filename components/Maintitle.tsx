@@ -11,7 +11,7 @@ import { Button } from './ui/button';
 
 export default function Maintitle() {
     const [userdetails, setUserDetails] = useState<UserType | null>(null);
-
+    const [isToastShown, setIsToastShown] = useState(false);
     const getUser = async () => {
         try {
             const apiUrl =
@@ -34,12 +34,14 @@ export default function Maintitle() {
 
     useEffect(() => {
         getUser();
+        setIsToastShown(true);
     }, []);
 
     const session = useSession();
     const user = session.data?.user?.name;
-    if (!user) {
-        toast('Sign in to explore all features');
+    if (!user && isToastShown) {
+        toast.error('Sign in to explore all features');
+        setIsToastShown(false);
     }
 
     return (
